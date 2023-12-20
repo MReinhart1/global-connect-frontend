@@ -9,20 +9,24 @@ import client from '../../axios/axios'
 export default function SignIn() {
   const dispatch = useDispatch()
   const [ errorMessage, setErrorMessage ] = useState("")
+  const [username, setUserName] = useState();
+  const [password, setPassword] = useState();
   const navigate = useNavigate();
 
-  async function login(values){
+  async function loginFunction(e){
+    e.preventDefault();
     let result = await client.post('/auth/login', {
-      "email": values.email,
-      "password": values.password
+      "email": username,
+      "password": password
     })
     if (result.data.token){
-      dispatch(login({ email: values.email, token: result.data.token }))
+      dispatch(login({ email: username, token: result.data.token })) //Do not use redux here for this
       navigate('/')
     } else {
       setErrorMessage(result.data)
     }
   }
+
   return (
     <>
       <div className="flex h-screen flex-col pt-24">
@@ -38,7 +42,7 @@ export default function SignIn() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={loginFunction}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email address
@@ -50,6 +54,7 @@ export default function SignIn() {
                   type="email"
                   autoComplete="email"
                   required
+                  onChange={e => setUserName(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -72,6 +77,7 @@ export default function SignIn() {
                   name="password"
                   type="password"
                   autoComplete="current-password"
+                  onChange={e => setPassword(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />

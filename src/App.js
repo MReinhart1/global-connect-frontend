@@ -14,16 +14,22 @@ import SiteBreadCrumb from "./pages/partials/sitebreadcrumb";
 export const UserContext = React.createContext()
 
 function App() {
+  const token = true //This is not done with redux now, need to implement using react state management
+  const ProtectedRoutes = () => {
+    return token ? <Outlet /> : <Navigate to="/auth/login" />
+  };
   return (
 <div className="App">
     <Navbar/>
     <SiteBreadCrumb/>
     <Routes>
-        <Route path="/" index element={<Home/>} />
-        <Route path="/login" index element={<SignIn/>} />
-        <Route path="/settings" index element={<UserSettings/>} />
+    <Route element={<ProtectedRoutes />}>
+    <Route path="/settings" index element={<UserSettings/>} />
         <Route path="/workqueue" index element={<WorkQueue/>} />
         <Route path="/upload" index element={<UploadProgram/>} />
+    </Route>
+        <Route path="/" index element={<Home/>} />
+        <Route path="/login" index element={<SignIn/>} />
         {/* <Route path="/other" index element={<OtherState/>} /> */}
         <Route path="/*" index element={<NotFound/>} />
     </Routes>
