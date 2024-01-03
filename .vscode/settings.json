@@ -10,7 +10,7 @@
   },
   "eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }],
   "typescript.tsdk": "node_modules/typescript/lib",
-  // ell VS Code to always open .css files in Tailwind CSS mode to avoid tailwind parsing error
+  // tell VS Code to always open .css files in Tailwind CSS mode to avoid tailwind parsing error
   "files.associations": {
     "*.css": "tailwindcss"
   }
