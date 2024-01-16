@@ -2,9 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
 
 import useSessionStore from '../stores/session'
+import { ApiResponse } from '../types/Axios'
 
 // update to use an env variable
 const API_BASE_URL = 'http://localhost:3000/'
@@ -33,9 +35,15 @@ client.interceptors.response.use(
       return Promise.reject(new Error(data?.code + ':' + data?.message))
     }
 
-    const apiResp = data
-    if (apiResp?.code && (apiResp.code < 200 || apiResp.code >= 300)) {
-      return Promise.reject({ code: apiResp.code, message: apiResp.message })
+    const apiResponse = data as ApiResponse
+    if (
+      apiResponse?.code &&
+      (apiResponse.code < 200 || apiResponse.code >= 300)
+    ) {
+      return Promise.reject({
+        code: apiResponse.code,
+        message: apiResponse.message,
+      })
     }
 
     return data

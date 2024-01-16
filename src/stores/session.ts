@@ -46,9 +46,8 @@ const useSessionStore = create<SessionState>()(
               throw new Error('Login failed')
             }
           } catch (error) {
-            // Handle the error (e.g., log, display a message)
             console.error('Login error:', error)
-            throw new Error('Login failed') // Throw an error or return a more informative response
+            throw new Error('Login failed')
           }
         },
         logout: async () => {
