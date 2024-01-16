@@ -28,15 +28,27 @@ const useSessionStore = create<SessionState>()(
           Cookies.get('token') === 'true' && Cookies.get('email') === 'true',
         setCurrentUser: cu => set({ currentUser: cu }),
         login: async (email: string, password: string) => {
-          const loginResponse = await login(email, password)
-          if (loginResponse === 'Logged In') {
-            const userData = await getUser(email)
-            set({
-              currentUser: userData?.result,
-              isAuthenticated: true,
-            })
-            const encodedEmail = btoa(userData?.result?.email ?? email)
-            Cookies.set('email', encodedEmail)
+          try {
+            const loginResponse = await login(email, password)
+            if (loginResponse === 'Logged In') {
+              const userData = await getUser(email)
+              if (userData?.result) {
+                set({
+                  currentUser: userData.result,
+                  isAuthenticated: true,
+                })
+                const encodedEmail = btoa(userData.result.email ?? email)
+                Cookies.set('email', encodedEmail)
+              } else {
+                throw new Error('User data not available')
+              }
+            } else {
+              throw new Error('Login failed')
+            }
+          } catch (error) {
+            // Handle the error (e.g., log, display a message)
+            console.error('Login error:', error)
+            throw new Error('Login failed') // Throw an error or return a more informative response
           }
         },
         logout: async () => {

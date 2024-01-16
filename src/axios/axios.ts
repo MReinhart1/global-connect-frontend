@@ -44,6 +44,7 @@ client.interceptors.response.use(
     if (axios.isCancel(error)) {
       return Promise.reject('Cancel request' + String(error))
     } else {
+      console.error('Network error:', error)
       error.errMessage = 'Something went wrong. Please try again.'
     }
     return Promise.reject(error)
