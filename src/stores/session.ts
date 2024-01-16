@@ -3,32 +3,47 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
+import { getUser, login, logout } from '../axios/apis/auth'
 import { User } from '../types/Users'
 
 interface SessionState {
   currentUser: User | null
-  getCurrentUser: () => void
   isAuthenticated: boolean
-  login: (cu: User) => void
-  logout: () => void
-  // add getAuthToken property
+  login: (email: string, password: string) => Promise<void>
+  logout: () => Promise<void>
+  setCurrentUser: (cu?: User | null) => void
+}
+
+const initialSessionState = {
+  currentUser: null,
+  isAuthenticated: false,
 }
 
 const useSessionStore = create<SessionState>()(
   persist(
     devtools(
-      immer((set, get) => ({
-        currentUser: null,
-        isAuthenticated: Cookies.get('authToken') === 'true',
-        getAuthToken: Cookies.get('authToken'),
-        getCurrentUser: () => get().currentUser,
-        login: () => {
-          Cookies.set('authToken', 'true')
-          set({ isAuthenticated: true })
+      immer(set => ({
+        ...initialSessionState,
+        isAuthenticated:
+          Cookies.get('token') === 'true' && Cookies.get('email') === 'true',
+        setCurrentUser: cu => set({ currentUser: cu }),
+        login: async (email: string, password: string) => {
+          const loginResponse = await login(email, password)
+          if (loginResponse === 'Logged In') {
+            const userData = await getUser(email)
+            set({
+              currentUser: userData?.result,
+              isAuthenticated: true,
+            })
+            const encodedEmail = btoa(userData?.result?.email ?? email)
+            Cookies.set('email', encodedEmail)
+          }
         },
-        logout: () => {
-          Cookies.remove('authToken')
-          set({ isAuthenticated: false })
+        logout: async () => {
+          await logout()
+          Cookies.remove('token')
+          Cookies.remove('email')
+          set({ isAuthenticated: false, currentUser: null })
         },
       })),
     ),

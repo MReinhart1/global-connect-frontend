@@ -8,6 +8,13 @@ export interface User {
   occupation: string
 }
 
+export interface GetUserRequest {
+  email: string
+}
+export interface GetUserResponse {
+  result: User
+}
+
 export interface UserPostRequest {
   email: string
   password: string
