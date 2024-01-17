@@ -1,11 +1,12 @@
 import 'antd/dist/reset.css'
 
-import { Button } from 'antd'
+import { Layout } from 'antd'
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 
 import { getUser } from './axios/apis/auth'
+import { Navbar } from './components/navbar/Navbar'
 import { Signin } from './pages/signin/Signin'
 import useSessionStore from './stores/session'
 
@@ -17,7 +18,7 @@ function App() {
   }
 
   useEffect(() => {
-    const userEmail = Cookies.get('email')
+    const userEmail = Cookies.get('userId')
     if (!isAuthenticated) {
       return setCurrentUser(null)
     }
@@ -37,19 +38,42 @@ function App() {
 
   return (
     <div className="App">
-      <div>Logged {isAuthenticated ? 'in' : 'out'}</div>
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-      {isAuthenticated && <Button onClick={logout}>Logout</Button>}
-      <Routes>
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/settings" index element={<div>Settings</div>} />
-          <Route path="/workqueue" index element={<div>Work Queue</div>} />
-          <Route path="/upload" index element={<div>Upload</div>} />
-        </Route>
-        <Route path="/" index element={<div>This is main page</div>} />
-        <Route path="/login" index element={<Signin />} />
-        <Route path="/*" index element={<div>404</div>} />
-      </Routes>
+      <Layout>
+        <Navbar />
+        <Layout.Content className="h-svh">
+          <Routes>
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/settings" index element={<div>Settings</div>} />
+              <Route path="/workqueue" index element={<div>Work Queue</div>} />
+              <Route path="/upload" index element={<div>Upload</div>} />
+              <Route
+                path="/program-snapshot"
+                index
+                element={<div>Program Snapshot</div>}
+              />
+              <Route
+                path="/program-details"
+                index
+                element={<div>Program Details</div>}
+              />
+              <Route
+                path="/service-history"
+                index
+                element={<div>Service History</div>}
+              />
+              <Route
+                path="/management-reports"
+                index
+                element={<div>Management Reports</div>}
+              />
+            </Route>
+            <Route path="/" index element={<div>This is main page</div>} />
+            <Route path="/about" index element={<div>About page</div>} />
+            <Route path="/login" index element={<Signin />} />
+            <Route path="/*" index element={<div>404</div>} />
+          </Routes>
+        </Layout.Content>
+      </Layout>
     </div>
   )
 }
