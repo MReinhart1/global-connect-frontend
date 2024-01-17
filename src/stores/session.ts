@@ -25,7 +25,7 @@ const useSessionStore = create<SessionState>()(
       immer(set => ({
         ...initialSessionState,
         isAuthenticated:
-          Cookies.get('token') === 'true' && Cookies.get('email') === 'true',
+          Cookies.get('token') === 'true' && Cookies.get('userId') === 'true',
         setCurrentUser: cu => set({ currentUser: cu }),
         login: async (email: string, password: string) => {
           try {
@@ -38,7 +38,7 @@ const useSessionStore = create<SessionState>()(
                   isAuthenticated: true,
                 })
                 const encodedEmail = btoa(userData.result.email ?? email)
-                Cookies.set('email', encodedEmail)
+                Cookies.set('userId', encodedEmail)
               } else {
                 throw new Error('User data not available')
               }
@@ -53,7 +53,7 @@ const useSessionStore = create<SessionState>()(
         logout: async () => {
           await logout()
           Cookies.remove('token')
-          Cookies.remove('email')
+          Cookies.remove('userId')
           set({ isAuthenticated: false, currentUser: null })
         },
       })),

@@ -10,7 +10,15 @@ import App from './App.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <ConfigProvider>
+      <ConfigProvider
+        theme={{
+          components: {
+            Button: {
+              textHoverBg: 'none',
+            },
+          },
+        }}
+      >
         <App />
       </ConfigProvider>
     </BrowserRouter>
