@@ -67,6 +67,7 @@ const NavbarLinks = () => {
         mode="horizontal"
         items={menuItems}
         selectedKeys={[selectedKey]}
+        className="border-none"
       />
     </div>
   )
