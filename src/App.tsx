@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 
 import { getUser } from './axios/apis/auth'
+import { Footer } from './components/footer/Footer'
 import { Navbar } from './components/navbar/Navbar'
 import { Signin } from './pages/signin/Signin'
 import useSessionStore from './stores/session'
@@ -40,7 +41,8 @@ function App() {
     <div className="App">
       <Layout>
         <Navbar />
-        <Layout.Content className="h-svh">
+        {/* 64px for header and 64px for footer */}
+        <Layout.Content className="h-[calc(100vh-64px-64px)]">
           <Routes>
             <Route element={<ProtectedRoutes />}>
               <Route path="/settings" index element={<div>Settings</div>} />
@@ -73,6 +75,7 @@ function App() {
             <Route path="/*" index element={<div>404</div>} />
           </Routes>
         </Layout.Content>
+        <Footer />
       </Layout>
     </div>
   )

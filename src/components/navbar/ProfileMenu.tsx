@@ -1,15 +1,33 @@
 import { UserOutlined } from '@ant-design/icons'
-import { Button, Dropdown } from 'antd'
+import { Button, Dropdown, notification } from 'antd'
 import { Link } from 'react-router-dom'
 
 import useSessionStore from '../../stores/session'
 
 const ProfileMenu = () => {
   const { currentUser, isAuthenticated, logout } = useSessionStore()
+  const [api, contextHolder] = notification.useNotification()
+
   const occupation = currentUser?.occupation
 
   const handleLogin = () => {
-    void logout()
+    logout()
+      .then(() =>
+        api['success']({
+          message: 'Success',
+          description: 'You have successfully logged out.',
+          placement: 'bottomRight',
+          duration: 3,
+        }),
+      )
+      .catch((error: Error) =>
+        api['error']({
+          message: 'Something went wrong',
+          description: error.message,
+          placement: 'bottomRight',
+          duration: 3,
+        }),
+      )
   }
 
   const menuItems = [
@@ -33,6 +51,7 @@ const ProfileMenu = () => {
 
   return (
     <>
+      {contextHolder}
       {!isAuthenticated && (
         <Link to="/login" className="text-black">
           Login
