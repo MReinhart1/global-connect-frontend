@@ -9,6 +9,7 @@ import { getUser } from './axios/apis/auth'
 import { Footer } from './components/footer/Footer'
 import { Navbar } from './components/navbar/Navbar'
 import { Signin } from './pages/signin/Signin'
+import { Welcome } from './pages/welcome/Welcome'
 import useSessionStore from './stores/session'
 
 function App() {
@@ -69,7 +70,7 @@ function App() {
                 element={<div>Management Reports</div>}
               />
             </Route>
-            <Route path="/" index element={<div>This is main page</div>} />
+            <Route path="/" index element={<Welcome />} />
             <Route path="/about" index element={<div>About page</div>} />
             <Route path="/login" index element={<Signin />} />
             <Route path="/*" index element={<div>404</div>} />
