@@ -13,7 +13,7 @@ const Footer = () => {
           >
             Terms of Use
           </a>
-          <span> | </span>
+          <span className="px-2"> | </span>
           <a
             href="/privacy"
             referrerPolicy="no-referrer"

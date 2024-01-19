@@ -11,7 +11,6 @@ type MenuItem = {
 }
 
 const publicMenuItems = [
-  { key: 'menu-item-home', label: 'Home', path: '/' },
   { key: 'menu-item-about', label: 'About', path: '/about' },
 ]
 
