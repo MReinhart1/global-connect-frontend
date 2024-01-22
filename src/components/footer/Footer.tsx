@@ -4,7 +4,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear()
   return (
     <Layout.Footer className="bg-slate-700 text-white">
-      <div className="flex justify-between">
+      <div className="flex justify-between max-w-screen-xl mx-auto">
         <p className="m-0">
           <a
             href="/terms"

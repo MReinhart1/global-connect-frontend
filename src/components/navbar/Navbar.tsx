@@ -2,8 +2,8 @@ import { Layout } from 'antd'
 import { Link } from 'react-router-dom'
 
 import logo from '../../assets/images/lowQualityLogo.png'
-import { NavbarLinks } from './NavbarLinks'
-import { ProfileMenu } from './ProfileMenu'
+import { NavbarLinks } from '../navbarLinks/NavbarLinks'
+import { ProfileMenu } from '../profileMenu/ProfileMenu'
 
 const Navbar = () => {
   return (
@@ -15,7 +15,9 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="sm:ml-6 w-full flex justify-between align-middle">
-          <NavbarLinks />
+          <div className="w-full">
+            <NavbarLinks />
+          </div>
           <div>
             <ProfileMenu />
           </div>

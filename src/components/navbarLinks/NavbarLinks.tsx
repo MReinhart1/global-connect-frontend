@@ -60,15 +60,13 @@ const NavbarLinks = () => {
   const selectedKey = menuItems.find(item => item.path === pathname)?.key ?? ''
 
   return (
-    <div className="w-full">
-      <Menu
-        theme="light"
-        mode="horizontal"
-        items={menuItems}
-        selectedKeys={[selectedKey]}
-        className="border-none"
-      />
-    </div>
+    <Menu
+      theme="light"
+      mode="horizontal"
+      items={menuItems}
+      selectedKeys={[selectedKey]}
+      className="border-none"
+    />
   )
 }
 

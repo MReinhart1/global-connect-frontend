@@ -1,6 +1,5 @@
 import { Form, Input, notification } from 'antd'
 import { useForm } from 'antd/es/form/Form'
-import { MouseEvent } from 'react'
 
 import { useIsFormValid } from '../../hooks/useIsFormValid'
 import useSessionStore from '../../stores/session'
@@ -14,7 +13,6 @@ type LoginProps = {
 const LoginForm = () => {
   const [form] = useForm<LoginProps>()
   const { isFormValid } = useIsFormValid(form)
-  const { getFieldsValue } = form
   const { login } = useSessionStore()
   const [api, contextHolder] = notification.useNotification()
 
@@ -27,9 +25,8 @@ const LoginForm = () => {
     })
   }
 
-  const handleOnSubmitClick = (e: MouseEvent<HTMLElement>) => {
-    e.preventDefault()
-    const { email, password } = getFieldsValue()
+  const handleSubmitForm = (values: LoginProps) => {
+    const { email, password } = values
     login(email, password).catch((error: Error) =>
       handleDisplayError(error.message),
     )
@@ -40,7 +37,7 @@ const LoginForm = () => {
       {contextHolder}
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-[480px]">
         <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-          <Form layout="vertical" form={form}>
+          <Form layout="vertical" form={form} onFinish={handleSubmitForm}>
             <Form.Item
               label="Email"
               name="email"
@@ -72,12 +69,7 @@ const LoginForm = () => {
               <Input.Password placeholder="Enter your password" />
             </Form.Item>
             <Form.Item>
-              <Button
-                htmlType="submit"
-                type="primary"
-                onClick={handleOnSubmitClick}
-                disabled={isFormValid}
-              >
+              <Button htmlType="submit" type="primary" disabled={isFormValid}>
                 Submit
               </Button>
             </Form.Item>

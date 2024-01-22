@@ -1,11 +1,17 @@
 export interface User {
-  company: string
-  country: string
+  company_id: string
+  country_id: string
+  createdAt: string
+  deleted: boolean
   email: string
   firstName: string
-  isDeleted: boolean
+  id: string
   lastName: string
+  manager: string
+  mobile: string
   occupation: string
+  password?: string
+  updatedAt: string
 }
 
 export interface GetUserRequest {
