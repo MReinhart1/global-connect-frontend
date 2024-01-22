@@ -8,7 +8,9 @@ import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import { getUser } from './axios/apis/auth'
 import { Footer } from './components/footer/Footer'
 import { Navbar } from './components/navbar/Navbar'
+import { Profile } from './pages/profile/Profile'
 import { Signin } from './pages/signin/Signin'
+import { Users } from './pages/users/Users'
 import { Welcome } from './pages/welcome/Welcome'
 import useSessionStore from './stores/session'
 
@@ -43,10 +45,9 @@ function App() {
       <Layout>
         <Navbar />
         {/* 64px for header and 64px for footer */}
-        <Layout.Content className="h-[calc(100vh-64px-64px)]">
+        <Layout.Content className="min-h-[calc(100vh-64px-64px)]">
           <Routes>
             <Route element={<ProtectedRoutes />}>
-              <Route path="/settings" index element={<div>Settings</div>} />
               <Route path="/workqueue" index element={<div>Work Queue</div>} />
               <Route path="/upload" index element={<div>Upload</div>} />
               <Route
@@ -69,6 +70,8 @@ function App() {
                 index
                 element={<div>Management Reports</div>}
               />
+              <Route path="/users" index element={<Users />} />
+              <Route path="/profile" index element={<Profile />} />
             </Route>
             <Route path="/" index element={<Welcome />} />
             <Route path="/about" index element={<div>About page</div>} />

@@ -31,8 +31,11 @@ const ProfileMenu = () => {
   }
 
   const menuItems = [
-    { key: 'menu-item-profile', label: 'Profile' },
-    { key: 'menu-item-settings', label: 'Settings' },
+    { key: 'menu-item-profile', label: <Link to="/profile">Profile</Link> },
+    {
+      key: 'menu-item-users-management',
+      label: <Link to="/users">Manage Users</Link>,
+    },
     {
       key: 'menu-item-logout',
       label: (
