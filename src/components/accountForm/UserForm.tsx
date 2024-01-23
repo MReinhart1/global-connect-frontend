@@ -48,20 +48,8 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
         onReset={() => resetFields()}
       >
         <h2 className="mb-8">User Information</h2>
-        {/* <div className="grid grid-cols-2 gap-4">
-          <Form.Item label="Updated At" name="updatedAt">
-            <DatePicker disabled size="large" className="w-full" />
-          </Form.Item>
-          <Form.Item label="Created At" name="createdAt">
-            <DatePicker disabled size="large" className="w-full" />
-          </Form.Item>
-        </div> */}
 
         <div className="grid grid-cols-2 gap-4">
-          <Form.Item label="ID" name="_id">
-            <Input disabled type="default" size="large" />
-          </Form.Item>
-
           <Form.Item
             label="Email"
             name="email"
@@ -71,6 +59,24 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
               type="default"
               size="large"
               placeholder="email@example.com"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Occupation"
+            name="occupation"
+            rules={[{ required: true }]}
+          >
+            <Select
+              size="large"
+              placeholder="Select occupation"
+              options={[
+                { label: 'Client', value: 'Client' },
+                { label: 'Broker', value: 'Broker' },
+                { label: 'Auditor', value: 'Auditor' },
+                { label: 'Underwriter', value: 'Underwriter' },
+                { label: 'Manager', value: 'Manager' },
+                { label: 'Administrator', value: 'Administrator' },
+              ]}
             />
           </Form.Item>
         </div>
@@ -95,25 +101,6 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
 
         <div className="grid grid-cols-2 gap-4">
           <Form.Item
-            label="Occupation"
-            name="occupation"
-            rules={[{ required: true }]}
-          >
-            <Select
-              size="large"
-              placeholder="Select occupation"
-              options={[
-                { label: 'Client', value: 'Client' },
-                { label: 'Broker', value: 'Broker' },
-                { label: 'Auditor', value: 'Auditor' },
-                { label: 'Underwriter', value: 'Underwriter' },
-                { label: 'Manager', value: 'Manager' },
-                { label: 'Administrator', value: 'Administrator' },
-              ]}
-            />
-          </Form.Item>
-
-          <Form.Item
             label="Manager"
             name="manager"
             rules={[{ required: true }]}
@@ -134,9 +121,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
               ]}
             />
           </Form.Item>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4">
           <Form.Item
             label="Mobile"
             name="mobile"
@@ -147,6 +132,12 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
               size="large"
               placeholder="Enter phone number"
             />
+          </Form.Item>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Form.Item label="ID" name="_id">
+            <Input disabled type="default" size="large" />
           </Form.Item>
         </div>
 
