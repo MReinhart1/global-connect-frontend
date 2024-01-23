@@ -4,7 +4,6 @@ import { FC } from 'react'
 
 import { useIsFormValid } from '../../hooks/useIsFormValid'
 import { User } from '../../types/Users'
-import { COUNTRIES } from '../../utils/countriesList'
 
 type UserFormProps = {
   user: User | null
@@ -153,10 +152,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
               showSearch
               placeholder="Select country"
               size="large"
-              options={COUNTRIES.map(country => ({
-                label: country,
-                value: country,
-              }))}
+              options={[]}
             />
           </Form.Item>
 
