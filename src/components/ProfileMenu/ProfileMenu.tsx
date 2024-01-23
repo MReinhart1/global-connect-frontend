@@ -1,5 +1,6 @@
 import { UserOutlined } from '@ant-design/icons'
 import { Button, Dropdown, notification } from 'antd'
+import { ItemType } from 'antd/es/menu/hooks/useItems'
 import { Link } from 'react-router-dom'
 
 import useSessionStore from '../../stores/session'
@@ -8,7 +9,7 @@ const ProfileMenu = () => {
   const { currentUser, isAuthenticated, logout } = useSessionStore()
   const [api, contextHolder] = notification.useNotification()
 
-  const occupation = currentUser?.occupation
+  const { occupation, firstName, lastName } = currentUser || {}
 
   const handleLogin = () => {
     logout()
@@ -30,7 +31,15 @@ const ProfileMenu = () => {
       )
   }
 
-  const menuItems = [
+  const menuItems: ItemType[] = [
+    {
+      key: 'menu-item-occupation',
+      label: `Signed in as ${occupation}`,
+      disabled: true,
+    },
+    {
+      type: 'divider',
+    },
     { key: 'menu-item-profile', label: <Link to="/profile">Profile</Link> },
     {
       key: 'menu-item-users-management',
@@ -48,7 +57,6 @@ const ProfileMenu = () => {
           Logout
         </Button>
       ),
-      path: '/logout',
     },
   ]
 
@@ -63,7 +71,7 @@ const ProfileMenu = () => {
       {isAuthenticated && (
         <Dropdown menu={{ items: menuItems }} trigger={['click']}>
           <Button className="border-0 shadow-none" icon={<UserOutlined />}>
-            {occupation}
+            {firstName} {lastName}
           </Button>
         </Dropdown>
       )}

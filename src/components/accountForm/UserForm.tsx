@@ -47,7 +47,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
         onFinish={handleSubmitForm}
         onReset={() => resetFields()}
       >
-        <h2 className="mb-8">User</h2>
+        <h2 className="mb-8">User Information</h2>
         {/* <div className="grid grid-cols-2 gap-4">
           <Form.Item label="Updated At" name="updatedAt">
             <DatePicker disabled size="large" className="w-full" />
@@ -118,7 +118,6 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
             name="manager"
             rules={[{ required: true }]}
           >
-            {/* TODO: Check if this is supposed to be an input or select */}
             <Select
               showSearch
               placeholder="Select manager"
@@ -151,7 +150,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
           </Form.Item>
         </div>
 
-        <h2 className="my-8">Company</h2>
+        <h2 className="my-8">Company Information</h2>
 
         <div className="grid grid-cols-2 gap-4">
           <Form.Item

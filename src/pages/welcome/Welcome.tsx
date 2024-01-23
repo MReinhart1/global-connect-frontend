@@ -4,7 +4,7 @@ import WelcomeVideo from '../../assets/videos/welcomeVideo1080p.mp4'
 const Welcome = () => {
   return (
     <div
-      className="relative bg-cover bg-center h-full flex items-center justify-center"
+      className="relative bg-cover bg-center min-h-[calc(100vh-64px-64px)] flex items-center justify-center"
       // TODO: remove this if we want to keep a video, keeping it as an example
       // style={{ backgroundImage: `url(${backgroundImage})` }}
     >

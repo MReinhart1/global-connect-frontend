@@ -8,7 +8,7 @@ type ContainerProps = {
 
 const Container: FC<ContainerProps> = ({ title, children, pageHeader }) => {
   return (
-    <div className="max-w-screen-xl xl:mx-auto sm:mx-3">
+    <div className="max-w-screen-xl xl:mx-auto sm:mx-7">
       {pageHeader && <h1 className="mt-8 mb-10">{pageHeader}</h1>}
       <div className="my-4 py-11 px-14 bg-white">
         {title && <h2 className="text-2xl font-semibold mb-10">{title}</h2>}
