@@ -1,8 +1,11 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button, Form, Input, notification, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { FC } from 'react'
 
+import { updateUser } from '../../axios/apis/user'
 import { useIsFormValid } from '../../hooks/useIsFormValid'
+import useSessionStore from '../../stores/session'
 import { User } from '../../types/Users'
 
 type UserFormProps = {
@@ -10,30 +13,55 @@ type UserFormProps = {
 }
 
 const UserForm: FC<UserFormProps> = ({ user }) => {
+  const { isAdmin } = useSessionStore()
   const [form] = useForm<Partial<User>>()
-  const { resetFields, isFieldsTouched } = form
+
   const { isFormValid } = useIsFormValid(form)
   const [api, contextHolder] = notification.useNotification()
+  const queryClient = useQueryClient()
 
-  const handleSubmitForm = (values: Partial<User>) => {
-    console.log(values)
-    try {
+  const { mutate: saveChanges, isPending } = useMutation({
+    mutationKey: ['updateUser', 'currentUser'],
+    mutationFn: updateUser,
+    onSuccess: () => {
       api['success']({
         message: 'Success',
         description: 'Changes have been saved successfully.',
         placement: 'bottomRight',
         duration: 5,
       })
-    } catch (error) {
+    },
+    onSettled: async () => {
+      await queryClient.refetchQueries({
+        queryKey: ['currentUser'],
+      })
+    },
+    onError: () => {
       api['error']({
         message: 'Something went wrong',
         description: 'Please check the form and try again.',
         placement: 'bottomRight',
         duration: 5,
       })
-    }
+    },
+  })
+
+  const handleSubmitForm = () => {
+    const values = getFieldsValue()
+    saveChanges({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      occupation: values.occupation,
+      mobile: values.mobile,
+    })
   }
 
+  if (!form) {
+    return null
+  }
+
+  const { getFieldsValue, resetFields, isFieldsTouched } = form
   const isFormTouched = isFieldsTouched()
 
   return (
@@ -68,6 +96,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
             <Select
               size="large"
               placeholder="Select occupation"
+              disabled={!isAdmin}
               options={[
                 { label: 'Client', value: 'Client' },
                 { label: 'Broker', value: 'Broker' },
@@ -153,6 +182,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
               placeholder="Select country"
               size="large"
               options={[]}
+              disabled={!isAdmin}
             />
           </Form.Item>
 
@@ -165,6 +195,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
               type="default"
               size="large"
               placeholder="Enter company name"
+              disabled={!isAdmin}
             />
           </Form.Item>
         </div>
@@ -175,6 +206,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
             htmlType="submit"
             className="w-28"
             disabled={isFormValid || !isFormTouched}
+            loading={isPending}
           >
             Save
           </Button>
@@ -184,6 +216,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
             danger
             className="w-28"
             disabled={!isFormTouched}
+            loading={isPending}
           >
             Reset
           </Button>

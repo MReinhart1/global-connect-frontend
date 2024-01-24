@@ -1,42 +1,27 @@
 import { GetUserRequest, GetUserResponse } from '../../types/Users'
 import { client } from '../axios'
 
-export const login = async (email: string, password: string) => {
-  try {
-    return await client.request<string, string>({
-      url: '/auth/login',
-      method: 'POST',
-      data: {
-        email,
-        password,
-      },
-    })
-  } catch (error) {
-    console.error(error)
-  }
+export const login = (email: string, password: string) => {
+  return client.request<string, string>({
+    url: '/auth/login',
+    method: 'POST',
+    data: {
+      email,
+      password,
+    },
+  })
 }
 
-export const getUser = async (email: string) => {
-  try {
-    return await client.request<GetUserRequest, GetUserResponse>({
-      url: '/auth/user',
-      method: 'POST',
-      data: {
-        email,
-      },
-    })
-  } catch (error) {
-    console.log(error)
-  }
+export const getCurrentUser = () => {
+  return client.request<GetUserRequest, GetUserResponse>({
+    url: '/auth/currentuser',
+    method: 'GET',
+  })
 }
 
-export const logout = async () => {
-  try {
-    await client.request({
-      url: '/auth/logout',
-      method: 'GET',
-    })
-  } catch (error) {
-    console.error(error)
-  }
+export const logout = () => {
+  return client.request({
+    url: '/auth/logout',
+    method: 'GET',
+  })
 }

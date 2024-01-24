@@ -15,7 +15,7 @@ export interface User {
 }
 
 export interface GetUserRequest {
-  email: string
+  user_id: string
 }
 export interface GetUserResponse {
   result: User
@@ -24,4 +24,8 @@ export interface GetUserResponse {
 export interface UserPostRequest {
   email: string
   password: string
+}
+
+export interface UpdateUserRequest {
+  user: Partial<User>
 }

@@ -1,6 +1,7 @@
 import Search from 'antd/es/input/Search'
 
 import { Container } from '../../components/container/Container'
+import { UsersTable } from './components/usersTable/UsersTable'
 
 const Users = () => {
   return (
@@ -13,6 +14,7 @@ const Users = () => {
             size="large"
             type="default"
           />
+          <UsersTable />
         </div>
       </Container>
     </>

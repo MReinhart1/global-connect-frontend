@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 import useSessionStore from '../stores/session'
 import { ApiResponse } from '../types/Axios'
@@ -11,7 +11,7 @@ import { ApiResponse } from '../types/Axios'
 // update to use an env variable
 const API_BASE_URL = 'http://localhost:3000/'
 
-const client: AxiosInstance = axios.create({
+const client = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
   headers: {
