@@ -40,7 +40,10 @@ const ProfileMenu = () => {
     {
       type: 'divider',
     },
-    { key: 'menu-item-profile', label: <Link to="/profile">Profile</Link> },
+    {
+      key: 'menu-item-profile',
+      label: <Link to="/profile">Profile Settings</Link>,
+    },
     ...(isAdmin
       ? [
           {
