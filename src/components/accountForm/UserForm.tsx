@@ -1,8 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Form, Input, notification, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { FC } from 'react'
 
+import { getCountries } from '../../axios/apis/organization'
 import { updateUser } from '../../axios/apis/user'
 import { useIsFormValid } from '../../hooks/useIsFormValid'
 import useSessionStore from '../../stores/session'
@@ -46,19 +47,22 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
     },
   })
 
+  const { data: countriesList, isLoading: isCountryListLoading } = useQuery({
+    queryKey: ['countriesList'],
+    queryFn: getCountries,
+    enabled: isAdmin,
+    select: data =>
+      data.map(country => ({ label: country.name, value: country.name })),
+  })
+
   const handleSubmitForm = () => {
     const values = getFieldsValue()
     saveChanges({
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
-      occupation: values.occupation,
       mobile: values.mobile,
     })
-  }
-
-  if (!form) {
-    return null
   }
 
   const { getFieldsValue, resetFields, isFieldsTouched } = form
@@ -88,23 +92,22 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
               placeholder="email@example.com"
             />
           </Form.Item>
+
           <Form.Item
-            label="Occupation"
-            name="occupation"
-            rules={[{ required: true }]}
+            label="Mobile"
+            name="mobile"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter your phone number',
+                pattern: /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
+              },
+            ]}
           >
-            <Select
+            <Input
+              type="default"
               size="large"
-              placeholder="Select occupation"
-              disabled={!isAdmin}
-              options={[
-                { label: 'Client', value: 'Client' },
-                { label: 'Broker', value: 'Broker' },
-                { label: 'Auditor', value: 'Auditor' },
-                { label: 'Underwriter', value: 'Underwriter' },
-                { label: 'Manager', value: 'Manager' },
-                { label: 'Administrator', value: 'Administrator' },
-              ]}
+              placeholder="Enter phone number"
             />
           </Form.Item>
         </div>
@@ -128,48 +131,16 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <Form.Item
-            label="Manager"
-            name="manager"
-            rules={[{ required: true }]}
-          >
-            <Select
-              showSearch
-              placeholder="Select manager"
-              size="large"
-              options={[
-                {
-                  label: 'Name 1',
-                  value: 'name1',
-                },
-                {
-                  label: 'Name 2',
-                  value: 'name2',
-                },
-              ]}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Mobile"
-            name="mobile"
-            rules={[{ type: 'regexp', pattern: /^[0-9]*$/, required: true }]}
-          >
-            <Input
-              type="default"
-              size="large"
-              placeholder="Enter phone number"
-            />
-          </Form.Item>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
           <Form.Item label="ID" name="_id">
             <Input disabled type="default" size="large" />
           </Form.Item>
         </div>
 
         <h2 className="my-8">Company Information</h2>
+        <p className="text-base pb-4">
+          <span className="font-semibold">Company Name:</span>{' '}
+          {user?.company_id}
+        </p>
 
         <div className="grid grid-cols-2 gap-4">
           <Form.Item
@@ -181,21 +152,9 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
               showSearch
               placeholder="Select country"
               size="large"
-              options={[]}
+              options={countriesList}
               disabled={!isAdmin}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Company"
-            name="company_id"
-            rules={[{ required: true }]}
-          >
-            <Input
-              type="default"
-              size="large"
-              placeholder="Enter company name"
-              disabled={!isAdmin}
+              loading={isCountryListLoading}
             />
           </Form.Item>
         </div>
