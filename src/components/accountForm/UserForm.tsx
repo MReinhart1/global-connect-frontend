@@ -137,9 +137,12 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
         </div>
 
         <h2 className="my-8">Company Information</h2>
-        <p className="text-base pb-4">
+        <p className="text-base">
           <span className="font-semibold">Company Name:</span>{' '}
           {user?.company_id}
+        </p>
+        <p className="text-base pb-4">
+          <span className="font-semibold">Manager:</span> {user?.manager}
         </p>
 
         <div className="grid grid-cols-2 gap-4">
