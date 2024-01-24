@@ -1,11 +1,12 @@
 import 'antd/dist/reset.css'
 
-import { Layout } from 'antd'
+import { useQuery } from '@tanstack/react-query'
+import { Layout, Spin } from 'antd'
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 
-import { getUser } from './axios/apis/auth'
+import { getCurrentUser } from './axios/apis/auth'
 import { Footer } from './components/footer/Footer'
 import { Navbar } from './components/navbar/Navbar'
 import { Profile } from './pages/profile/Profile'
@@ -15,25 +16,41 @@ import { Welcome } from './pages/welcome/Welcome'
 import useSessionStore from './stores/session'
 
 function App() {
-  const { isAuthenticated, setCurrentUser, logout } = useSessionStore()
+  const { isAuthenticated, isAdmin, setCurrentUser, logout } = useSessionStore()
+  const { isLoading } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: async () => {
+      const response = await getCurrentUser()
+      setCurrentUser(response?.result)
+      return response
+    },
+    enabled: isAuthenticated,
+  })
 
   const ProtectedRoutes = () => {
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" />
+    return isAuthenticated ? (
+      <Spin size="large" tip="Loading" spinning={isLoading}>
+        <Outlet />
+      </Spin>
+    ) : (
+      <Navigate to="/login" />
+    )
+  }
+
+  const AdminRoutes = () => {
+    return isAdmin ? <Outlet /> : <Navigate to="/" />
   }
 
   useEffect(() => {
-    const userEmail = Cookies.get('userId')
+    const userId = Cookies.get('userId')
     if (!isAuthenticated) {
       return setCurrentUser(null)
     }
 
     const authenticate = async () => {
-      if (!userEmail) {
+      if (!userId) {
         return logout()
       }
-      const decodedUserEmail = atob(userEmail)
-      const data = await getUser(decodedUserEmail)
-      setCurrentUser(data?.result)
     }
     void authenticate()
     // only need to run this useEffect on initial render to get currentUser
@@ -70,7 +87,9 @@ function App() {
                 index
                 element={<div>Management Reports</div>}
               />
-              <Route path="/users" index element={<Users />} />
+              <Route element={<AdminRoutes />}>
+                <Route path="/users" index element={<Users />} />
+              </Route>
               <Route path="/profile" index element={<Profile />} />
             </Route>
             <Route path="/" index element={<Welcome />} />

@@ -3,11 +3,12 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-import { getUser, login, logout } from '../axios/apis/auth'
+import { getCurrentUser, login, logout } from '../axios/apis/auth'
 import { User } from '../types/Users'
 
 interface SessionState {
   currentUser: User | null
+  isAdmin: boolean
   isAuthenticated: boolean
   login: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
@@ -17,6 +18,11 @@ interface SessionState {
 const initialSessionState = {
   currentUser: null,
   isAuthenticated: false,
+  isAdmin: false,
+}
+
+const isAdmin = (occupation?: User['occupation']) => {
+  return occupation === 'Administrator'
 }
 
 const useSessionStore = create<SessionState>()(
@@ -26,19 +32,20 @@ const useSessionStore = create<SessionState>()(
         ...initialSessionState,
         isAuthenticated:
           Cookies.get('token') === 'true' && Cookies.get('userId') === 'true',
-        setCurrentUser: cu => set({ currentUser: cu }),
+        setCurrentUser: cu =>
+          set({ currentUser: cu, isAdmin: isAdmin(cu?.occupation) }),
         login: async (email: string, password: string) => {
           try {
             const loginResponse = await login(email, password)
             if (loginResponse === 'Logged In') {
-              const userData = await getUser(email)
+              const userData = await getCurrentUser()
               if (userData?.result) {
                 set({
                   currentUser: userData.result,
                   isAuthenticated: true,
                 })
-                const encodedEmail = btoa(userData.result.email ?? email)
-                Cookies.set('userId', encodedEmail)
+                const userId = btoa(userData.result.email)
+                Cookies.set('userId', userId)
               } else {
                 throw new Error('User data not available')
               }

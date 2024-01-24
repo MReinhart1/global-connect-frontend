@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import useSessionStore from '../../stores/session'
 
 const ProfileMenu = () => {
-  const { currentUser, isAuthenticated, logout } = useSessionStore()
+  const { currentUser, isAuthenticated, isAdmin, logout } = useSessionStore()
   const [api, contextHolder] = notification.useNotification()
 
   const { occupation, firstName, lastName } = currentUser || {}
@@ -41,10 +41,14 @@ const ProfileMenu = () => {
       type: 'divider',
     },
     { key: 'menu-item-profile', label: <Link to="/profile">Profile</Link> },
-    {
-      key: 'menu-item-users-management',
-      label: <Link to="/users">Manage Users</Link>,
-    },
+    ...(isAdmin
+      ? [
+          {
+            key: 'menu-item-users-management',
+            label: <Link to="/users">Manage Users</Link>,
+          },
+        ]
+      : []),
     {
       key: 'menu-item-logout',
       label: (
