@@ -17,7 +17,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
   const { isAdmin } = useSessionStore()
   const [form] = useForm<Partial<User>>()
 
-  const { isFormValid } = useIsFormValid(form)
+  const { isFormValid, isFormTouched } = useIsFormValid(form)
   const [api, contextHolder] = notification.useNotification()
   const queryClient = useQueryClient()
 
@@ -55,8 +55,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
       data.map(country => ({ label: country.name, value: country.name })),
   })
 
-  const handleSubmitForm = () => {
-    const values = getFieldsValue()
+  const handleSubmitForm = (values: Partial<User>) => {
     saveChanges({
       firstName: values.firstName,
       lastName: values.lastName,
@@ -64,9 +63,6 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
       mobile: values.mobile,
     })
   }
-
-  const { getFieldsValue, resetFields, isFieldsTouched } = form
-  const isFormTouched = isFieldsTouched()
 
   return (
     <>
@@ -76,9 +72,9 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
         layout="vertical"
         initialValues={user || {}}
         onFinish={handleSubmitForm}
-        onReset={() => resetFields()}
+        onReset={() => form.resetFields()}
       >
-        <h2 className="mb-8">User Information</h2>
+        <h2 className="text-2xl font-semibold mb-10">User Information</h2>
 
         <div className="grid grid-cols-2 gap-4">
           <Form.Item
@@ -136,7 +132,7 @@ const UserForm: FC<UserFormProps> = ({ user }) => {
           </Form.Item>
         </div>
 
-        <h2 className="my-8">Company Information</h2>
+        <h2 className="text-2xl font-semibold my-10">Company Information</h2>
         <p className="text-base">
           <span className="font-semibold">Company Name:</span>{' '}
           {user?.company_id}
